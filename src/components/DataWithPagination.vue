@@ -1,7 +1,11 @@
 <template>
   <div>
+      <div>
+          Search: <input text="type" v-model.lazy="query"/>
+      </div>
+   
     <!--分頁部分-->
-    <!-- <div class="row justify-content-center">
+    <div class="row justify-content-center">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li
@@ -9,7 +13,7 @@
             :class="['page-item',{disabled:currentPage===1}]"
             @click.prevent="setPage(currentPage-1)"
           >
-            <a class="page-link" href="#">&lt;</a>
+            <a class="page-link" href="#">Prev</a>
           </li>
           <li
             v-for="page in totalPage"
@@ -25,11 +29,11 @@
             :class="['page-item',{disabled:currentPage===totalPage}]"
             @click.prevent="setPage(currentPage+1)"
           >
-            <a class="page-link" href="#">&gt;</a>
+            <a class="page-link" href="#">Next</a>
           </li>
         </ul>
       </nav>
-    </div> -->
+    </div>
    <!--表格部分-->
    <table style="margin:0 auto;">
       <thead>
@@ -48,7 +52,7 @@
           v-for="(tableData,index) in filterRows.slice(pageStart, pageStart + offset)"
           :key="index.id"
         > -->
-        <tr v-for="(item,index) in tableData" :key="index">
+        <tr v-for="(item,index) in filterRows.slice(pageStart, pageStart + offset)" :key="index">
           <td>
               <img v-bind:src="item.flag" style="width: 10vw;">
           </td>
@@ -87,27 +91,27 @@ export default {
       },
       query: "",
       currentPage: 1,
-      offset: 20
+      offset: 25
     };
   },
   computed: {
-    // filterRows() {
-    //   let query = this.query.toLowerCase();
-    //   let originData = this.countries;
-    //   if (!this.query.match(/^[ ]*$/)) {
-    //     return originData.filter(d => {
-    //       return d.name.toLowerCase().indexOf(query) > -1;
-    //     });
-    //   } else {
-    //     return originData;
-    //   }
-    // },
-    // pageStart() {
-    //   return (this.currentPage - 1) * this.offset;
-    // },
-    // totalPage() {
-    //   return Math.ceil(this.filterRows.length / this.offset);
-    // }
+    filterRows() {
+      let query = this.query.toLowerCase();
+      let originData = this.tableData;
+      if (!this.query.match(/^[ ]*$/)) {
+        return originData.filter(d => {
+          return d.name.toLowerCase().indexOf(query) > -1;
+        });
+      } else {
+        return originData;
+      }
+    },
+    pageStart() {
+      return (this.currentPage - 1) * this.offset;
+    },
+    totalPage() {
+      return Math.ceil(this.filterRows.length / this.offset);
+    }
   },
   methods: {
     readDataFromAPI() {
@@ -121,7 +125,7 @@ export default {
         .then((response) => {
           //Then injecting the result to datatable parameters.
           this.tableData = [...response.data];
-          console.log(response.data);
+        //   console.log(response.data);
         });
     },
     setPage(idx) {
