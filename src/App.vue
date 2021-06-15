@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <CountryCatalog msg="Country Catalogue"/>
+    <DataWithPagination/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CountryCatalog from './components/CountryCatalog.vue'
+import DataWithPagination from './components/DataWithPagination.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    CountryCatalog,
+    DataWithPagination
   }
 }
 </script>
