@@ -1,8 +1,8 @@
 <template>
   <div>
-      <div>
-          Search: <input text="type" v-model.lazy="query"/>
-      </div>
+    <div>
+        Search: <input text="type" v-model.lazy="query"/>
+    </div>
    
     <!--分頁部分-->
     <div class="row justify-content-center">
@@ -52,7 +52,7 @@
           <td>
               <img v-bind:src="item.flag" style="width: 10vw;">
           </td>
-          <td>{{item.name}}</td>
+          <td @click="popUp(item.name)">{{item.name}}</td>
           <td>{{item.alpha2Code}}</td>
           <td>{{item.alpha3Code}}</td>
           <td>{{item.nativeName}}</td>
@@ -61,18 +61,20 @@
         </tr>
       </tbody>
     </table>
+
+    <modal :countries="country" v-if="showModal" @close="showModal = false">
+    </modal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Modal from './Modal.vue'
+
 export default {
   name: "DataWithPagination",
-  props: {
-    // countries: {
-    //   type: Array,
-    //   required: true
-    // }
+  components: {
+      Modal,
   },
   data() {
     return {
@@ -90,6 +92,8 @@ export default {
       offset: 25,
       currnetSortDir: "asc",
       currentSortCol: "name",
+      showModal: false,
+      country: [],
     };
   },
   computed: {
@@ -113,9 +117,6 @@ export default {
   },
   methods: {
     readDataFromAPI() {
-    //   this.loading = true;
-    //   const { page, itemsPerPage } = this.options;
-    //   let pageNumber = page - 1;
       axios
         .get(
           "https://restcountries.eu/rest/v2/all"
@@ -135,6 +136,14 @@ export default {
     sorting() {
         this.tableData.sort();
         this.tableData.reverse();
+    },
+    popUp(select){
+        this.showModal=true;
+        let originData = this.tableData;
+        this.country = originData.filter(d => {
+            return d.name.toLowerCase().indexOf(select.toLowerCase()) > -1;
+            });
+        console.log(this.country);
     }
   },
   mounted() {
