@@ -38,20 +38,16 @@
    <table style="margin:0 auto;">
       <thead>
         <tr>
-          <th scope="col">國旗</th>
-          <th scope="col">國家名稱</th>
-          <th scope="col">2位國家代碼</th>
-          <th scope="col">3位國家代碼</th>
-          <th scope="col">母語名稱</th>
-          <th scope="col">替代國家名稱</th>
-          <th scope="col">國際電話區號</th>
+            <th scope="col">國旗</th>
+            <th scope="col" @click="sorting('name')">國家名稱</th>
+            <th scope="col">2位國家代碼</th>
+            <th scope="col">3位國家代碼</th>
+            <th scope="col">母語名稱</th>
+            <th scope="col">替代國家名稱</th>
+            <th scope="col">國際電話區號</th>
         </tr>
       </thead>
       <tbody>
-        <!-- <tr
-          v-for="(tableData,index) in filterRows.slice(pageStart, pageStart + offset)"
-          :key="index.id"
-        > -->
         <tr v-for="(item,index) in filterRows.slice(pageStart, pageStart + offset)" :key="index">
           <td>
               <img v-bind:src="item.flag" style="width: 10vw;">
@@ -91,7 +87,9 @@ export default {
       },
       query: "",
       currentPage: 1,
-      offset: 25
+      offset: 25,
+      currnetSortDir: "asc",
+      currentSortCol: "name",
     };
   },
   computed: {
@@ -133,6 +131,25 @@ export default {
         return;
       }
       this.currentPage = idx;
+    },
+    sorting(col) {
+      this.currentPage = 1;
+
+      this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+
+      this.tableData.sort(this.sortBy(col, this.currentSortDir));
+    },
+    sortBy(property, order) {
+      this.currnetSortDir=order;
+      return function(a, b) {
+        const varA = a[property].toLowerCase().trim();
+        const varB = b[property].toLowerCase().trim();
+
+        let comparison = 0;
+        if (varA > varB) comparison = 1;
+        else if (varA < varB) comparison = -1;
+        return order === "desc" ? comparison * -1 : comparison;
+      };
     }
   },
   mounted() {
