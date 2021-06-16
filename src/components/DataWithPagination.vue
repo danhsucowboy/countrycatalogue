@@ -132,24 +132,9 @@ export default {
       }
       this.currentPage = idx;
     },
-    sorting(col) {
-      this.currentPage = 1;
-
-      this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
-
-      this.tableData.sort(this.sortBy(col, this.currentSortDir));
-    },
-    sortBy(property, order) {
-      this.currnetSortDir=order;
-      return function(a, b) {
-        const varA = a[property].toLowerCase().trim();
-        const varB = b[property].toLowerCase().trim();
-
-        let comparison = 0;
-        if (varA > varB) comparison = 1;
-        else if (varA < varB) comparison = -1;
-        return order === "desc" ? comparison * -1 : comparison;
-      };
+    sorting() {
+        this.tableData.sort();
+        this.tableData.reverse();
     }
   },
   mounted() {
