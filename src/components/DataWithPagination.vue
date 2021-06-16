@@ -5,7 +5,7 @@
     </div>
    
     <!--分頁部分-->
-    <div class="row justify-content-center">
+    <div>
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li
@@ -13,7 +13,7 @@
             :class="['page-item',{disabled:currentPage===1}]"
             @click.prevent="setPage(currentPage-1)"
           >
-            <a class="page-link" href="#">Prev</a>
+            <a href="#">Prev</a>
           </li>
           <li
             v-for="page in totalPage"
@@ -22,14 +22,14 @@
             :class="['page-item',{active:currentPage === page}]"
             @click.prevent="setPage(page)"
           >
-            <a class="page-link" href="#">{{page}}</a>
+            <a href="#">{{page}}</a>
           </li>
           <li
             class="page-item"
             :class="['page-item',{disabled:currentPage===totalPage}]"
             @click.prevent="setPage(currentPage+1)"
           >
-            <a class="page-link" href="#">Next</a>
+            <a href="#">Next</a>
           </li>
         </ul>
       </nav>
@@ -159,3 +159,14 @@ export default {
   }
 };
 </script>
+
+<style>
+.pagination{
+    display: inline-flex;
+}
+
+.page-item{
+    list-style: none;
+    margin: 6px;
+}
+</style>
